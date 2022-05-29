@@ -26,7 +26,7 @@ const App = () => {
           showsHorizontalScrollIndicator={true}
           persistentScrollbar={true}
           contentContainerStyle={{
-            width: 1000,
+            width: 970,
             height: 100,
             flexDirection: 'column',
             justifyContent: 'center',
@@ -49,73 +49,35 @@ const App = () => {
               alignItems: 'baseline',
               position: 'absolute',
               top: 22,
+              zIndex: -10, // to show the marker on Top of each graduation
             }}>
-            <Text style={{paddingRight: 3.3, fontSize: 32}}>{'|'}</Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 32}}>{'|'}</Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 32}}>{'|'}</Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 32}}>{'|'}</Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 32}}>{'|'}</Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 20, fontWeight: 'bold'}}>
-              {'|'}
-            </Text>
-            <Text style={{paddingRight: 3.3, fontSize: 32}}>{'|'}</Text>
+            {Array(101)
+              .fill()
+              .map((_, i) => i)
+              .map((value, index) => {
+                if ((index > 0 && index % 5 === 0) || index === 0) {
+                  return (
+                    <Text
+                      key={index.toString()}
+                      style={{paddingRight: 3.3, fontSize: 32, color: 'grey'}}>
+                      {'|'}
+                    </Text>
+                  );
+                } else if (index > 0 && index % 5 !== 0) {
+                  return (
+                    <Text
+                      key={index.toString()}
+                      style={{
+                        paddingRight: 3.3,
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: 'grey',
+                      }}>
+                      {'|'}
+                    </Text>
+                  );
+                }
+              })}
           </View>
           <View
             style={{
@@ -124,12 +86,35 @@ const App = () => {
               alignItems: 'baseline',
               paddingTop: 24,
             }}>
-            <Text style={{paddingRight: 30, fontSize: 20}}>{'0'}</Text>
-            <Text style={{paddingRight: 28, fontSize: 20}}>{'5'}</Text>
-            <Text style={{paddingRight: 28, fontSize: 20}}>{'10'}</Text>
-            <Text style={{paddingRight: 24, fontSize: 20}}>{'15'}</Text>
-            <Text style={{paddingRight: 24, fontSize: 20}}>{'20'}</Text>
-            <Text style={{paddingRight: 24, fontSize: 20}}>{'25'}</Text>
+            {Array(101)
+              .fill()
+              .map((_, i) => i)
+              .map((value, index) => {
+                if ((index > 0 && index % 5 === 0) || index === 0) {
+                  return (
+                    <Text
+                      key={index.toString()}
+                      style={{
+                        color: 'grey',
+                        paddingRight:
+                          index === 0
+                            ? 30
+                            : index <= 10
+                            ? 28
+                            : index <= 40
+                            ? 22
+                            : index <= 60
+                            ? 20
+                            : index <= 70
+                            ? 22
+                            : 20,
+                        fontSize: 20,
+                      }}>
+                      {index}
+                    </Text>
+                  );
+                }
+              })}
           </View>
         </ScrollView>
       </View>
