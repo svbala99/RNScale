@@ -1,36 +1,31 @@
+// library imports
 import React from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, StyleSheet} from 'react-native';
+
+// imported libraries
 import Slider from '@react-native-community/slider';
 
+/**
+ * @function App
+ * @returns {JSX}
+ * @description the main App component
+ */
 const App = () => {
   const [weight, setWeight] = React.useState(10);
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <View
-        style={{
-          width: 300,
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'scroll',
-        }}>
-        <Text style={{fontWeight: 'bold', fontSize: 20, paddingBottom: 24}}>
-          {'How much do you weigh Mani?'}
-        </Text>
-        <Text style={{fontWeight: 'bold', fontSize: 32}}>
+    <View style={styles.overallContainer}>
+      <View style={styles.weightContainer}>
+        <Text style={styles.weighCaption}>{'How much do you weigh Mani?'}</Text>
+        <Text style={styles.weightDisplayText}>
           {`${weight} `}
-          <Text style={{fontSize: 24}}>{'kg'}</Text>
+          <Text style={styles.font24}>{'kg'}</Text>
         </Text>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={true}
           persistentScrollbar={true}
-          contentContainerStyle={{
-            width: 970,
-            height: 100,
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}>
+          contentContainerStyle={styles.horizontalScrollContainer}>
           <Slider
             thumbImage={require('./assets/img/marker.png')}
             tapToSeek={true}
@@ -42,15 +37,7 @@ const App = () => {
             step={1}
             value={weight}
           />
-          <View
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 30,
-              alignItems: 'baseline',
-              position: 'absolute',
-              top: 22,
-              zIndex: -10, // to show the marker on Top of each graduation
-            }}>
+          <View style={styles.markingContainer}>
             {Array(101)
               .fill()
               .map((_, i) => i)
@@ -59,7 +46,7 @@ const App = () => {
                   return (
                     <Text
                       key={index.toString()}
-                      style={{paddingRight: 3.3, fontSize: 32, color: 'grey'}}>
+                      style={styles.weighMarkerLarge}>
                       {'|'}
                     </Text>
                   );
@@ -67,25 +54,14 @@ const App = () => {
                   return (
                     <Text
                       key={index.toString()}
-                      style={{
-                        paddingRight: 3.3,
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                        color: 'grey',
-                      }}>
+                      style={styles.weighMarkerSmall}>
                       {'|'}
                     </Text>
                   );
                 }
               })}
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 30,
-              alignItems: 'baseline',
-              paddingTop: 24,
-            }}>
+          <View style={styles.weighGraduationContainer}>
             {Array(101)
               .fill()
               .map((_, i) => i)
@@ -94,22 +70,24 @@ const App = () => {
                   return (
                     <Text
                       key={index.toString()}
-                      style={{
-                        color: 'grey',
-                        paddingRight:
-                          index === 0
-                            ? 30
-                            : index <= 10
-                            ? 28
-                            : index <= 40
-                            ? 22
-                            : index <= 60
-                            ? 20
-                            : index <= 70
-                            ? 22
-                            : 20,
-                        fontSize: 20,
-                      }}>
+                      style={[
+                        styles.weighGraduationText,
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        {
+                          paddingRight:
+                            index === 0
+                              ? 30
+                              : index <= 10
+                              ? 28
+                              : index <= 40
+                              ? 22
+                              : index <= 60
+                              ? 20
+                              : index <= 70
+                              ? 22
+                              : 20,
+                        },
+                      ]}>
                       {index}
                     </Text>
                   );
@@ -121,4 +99,47 @@ const App = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  overallContainer: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  weightContainer: {
+    width: 300,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'scroll',
+  },
+  weighCaption: {fontWeight: 'bold', fontSize: 20, paddingBottom: 24},
+  weightDisplayText: {fontWeight: 'bold', fontSize: 32},
+  font24: {fontSize: 24},
+  horizontalScrollContainer: {
+    width: 970,
+    height: 100,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginLeft: -30,
+  },
+  markingContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 30,
+    alignItems: 'baseline',
+    position: 'absolute',
+    top: 22,
+    zIndex: -10, // to show the marker on Top of each graduation
+  },
+  weighMarkerLarge: {paddingRight: 3.3, fontSize: 32, color: 'grey'},
+  weighMarkerSmall: {
+    paddingRight: 3.3,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'grey',
+  },
+  weighGraduationContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 30,
+    alignItems: 'baseline',
+    paddingTop: 24,
+  },
+  weighGraduationText: {color: 'grey', fontSize: 20},
+});
+
 export default App;
