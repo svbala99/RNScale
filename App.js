@@ -14,6 +14,7 @@ const App = () => {
   const [weight, setWeight] = React.useState(10);
   return (
     <View style={styles.overallContainer}>
+      {/* Weigh container */}
       <View style={styles.weightContainer}>
         <Text style={styles.weighCaption}>{'How much do you weigh Mani?'}</Text>
         <Text style={styles.weightDisplayText}>
@@ -96,12 +97,98 @@ const App = () => {
           </View>
         </ScrollView>
       </View>
+      <View style={styles.weightContainer}>
+        <Text style={styles.weighCaption}>{'How tall are you Mani?'}</Text>
+        <Text style={styles.weightDisplayText}>
+          {`${weight} `}
+          <Text style={styles.font24}>{'kg'}</Text>
+        </Text>
+        {/* Height container */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={true}
+          persistentScrollbar={true}
+          contentContainerStyle={styles.horizontalScrollContainer}>
+          <Slider
+            thumbImage={require('./assets/img/marker.png')}
+            tapToSeek={true}
+            onValueChange={v => setWeight(v)}
+            minimumValue={0}
+            maximumValue={100}
+            minimumTrackTintColor={'white'}
+            maximumTrackTintColor={'white'}
+            step={1}
+            value={weight}
+          />
+          <View style={styles.markingContainer}>
+            {Array(101)
+              .fill()
+              .map((_, i) => i)
+              .map((value, index) => {
+                if ((index > 0 && index % 5 === 0) || index === 0) {
+                  return (
+                    <Text
+                      key={index.toString()}
+                      style={styles.weighMarkerLarge}>
+                      {'|'}
+                    </Text>
+                  );
+                } else if (index > 0 && index % 5 !== 0) {
+                  return (
+                    <Text
+                      key={index.toString()}
+                      style={styles.weighMarkerSmall}>
+                      {'|'}
+                    </Text>
+                  );
+                }
+              })}
+          </View>
+          <View style={styles.weighGraduationContainer}>
+            {Array(101)
+              .fill()
+              .map((_, i) => i)
+              .map((value, index) => {
+                if ((index > 0 && index % 5 === 0) || index === 0) {
+                  return (
+                    <Text
+                      key={index.toString()}
+                      style={[
+                        styles.weighGraduationText,
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        {
+                          paddingRight:
+                            index === 0
+                              ? 30
+                              : index <= 10
+                              ? 28
+                              : index <= 40
+                              ? 22
+                              : index <= 60
+                              ? 20
+                              : index <= 70
+                              ? 22
+                              : 20,
+                        },
+                      ]}>
+                      {index}
+                    </Text>
+                  );
+                }
+              })}
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  overallContainer: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  overallContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
   weightContainer: {
     width: 300,
     alignItems: 'center',
