@@ -4,8 +4,8 @@
 
 ### A simple app in react native to use the scale for weight and height measurement by providing the sliding experience to the user.
 
-### Download the ipa from:  [Github link for ipa](https://github.com/svbala99/RNScale/raw/master/RNScale.ipa)
-### Download from Diawi: [Diawi Link](https://i.diawi.com/WBXrkq)
+### Download the ipa from:  [Github link](https://github.com/svbala99/RNScale/raw/master/RNScale.ipa), [Diawi Link](https://i.diawi.com/WBXrkq)
+### Downliad the APK from: [Google Drive Link](https://drive.google.com/drive/folders/1xi_V7x8wm6UcgTfZhS5QzoFwuJK0Nzv1?usp=sharing),  [Diawi link](https://i.diawi.com/Je4zVB)
 
 ## Constraints
 - It's a slider scale by which user will be able to move left or right on a horizontal scale and up or down on a Vertical scale to select a value.
