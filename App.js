@@ -1,9 +1,13 @@
 // library imports
-import React from 'react';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
-
-// imported libraries
-import Slider from '@react-native-community/slider';
+import React, {useRef} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from 'react-native';
 
 /**
  * @function App
@@ -12,8 +16,23 @@ import Slider from '@react-native-community/slider';
  */
 const App = () => {
   // state variables
-  const [weight, setWeight] = React.useState(10);
-  const [height, setHeight] = React.useState(40);
+  const [weight, setWeight] = React.useState(1500);
+  const [height, setHeight] = React.useState(650);
+
+  const scrollViewRef1 = useRef();
+  const scrollViewRef2 = useRef();
+
+  // calculate weight
+  let displayWeightText = weight > 0 ? Math.floor(weight / 8.9) : 0;
+  displayWeightText /= 10;
+
+  // calculate height
+  let displayInchText = height > 0 ? Math.floor(height / 9) : 0;
+  let displayFeetText = 0;
+  if (displayInchText > 11) {
+    displayFeetText = Math.floor(displayInchText / 12);
+    displayInchText = displayInchText - 12 * Math.floor(displayInchText / 12);
+  }
 
   /**
    * @function displayHeightText
@@ -32,31 +51,32 @@ const App = () => {
       <View style={styles.weightContainer}>
         <Text style={styles.weighCaption}>{'How much do you weigh Mani?'}</Text>
         <Text style={styles.weightDisplayText}>
-          {`${weight} `}
+          {`${displayWeightText} `}
           <Text style={styles.font24}>{'kg'}</Text>
         </Text>
+        <Image style={{top: 16}} source={require('./assets/img/marker.png')} />
         <ScrollView
+          ref={scrollViewRef1}
+          onContentSizeChange={() =>
+            scrollViewRef1.current.scrollTo({
+              x: 1500,
+              animated: true,
+            })
+          }
+          scrollEventThrottle={200}
+          onScroll={event =>
+            setWeight(Math.floor(Number(event.nativeEvent.contentOffset.x)))
+          }
           horizontal
           showsHorizontalScrollIndicator={true}
           persistentScrollbar={true}
-          contentContainerStyle={styles.horizontalScrollContainer}>
-          <Slider
-            thumbImage={require('./assets/img/marker.png')}
-            tapToSeek={true}
-            onValueChange={v => setWeight(v)}
-            minimumValue={0}
-            maximumValue={100}
-            minimumTrackTintColor={'white'}
-            maximumTrackTintColor={'white'}
-            step={1}
-            value={weight}
-          />
-          <View style={styles.markingContainer}>
-            {Array(101)
+          contentContainerStyle={styles.weightScrollContainer}>
+          <View style={styles.markingContainerWeight}>
+            {Array(1000)
               .fill()
               .map((_, i) => i)
               .map((value, index) => {
-                if ((index > 0 && index % 5 === 0) || index === 0) {
+                if ((index > 0 && index % 10 === 0) || index === 0) {
                   return (
                     <Text
                       key={index.toString()}
@@ -64,7 +84,7 @@ const App = () => {
                       {'|'}
                     </Text>
                   );
-                } else if (index > 0 && index % 5 !== 0) {
+                } else if (index > 0 && index % 10 !== 0) {
                   return (
                     <Text
                       key={index.toString()}
@@ -76,7 +96,7 @@ const App = () => {
               })}
           </View>
           <View style={styles.weighGraduationContainer}>
-            {Array(101)
+            {Array(1000)
               .fill()
               .map((_, i) => i)
               .map((value, index) => {
@@ -85,24 +105,14 @@ const App = () => {
                     <Text
                       key={index.toString()}
                       style={[
-                        styles.weighGraduationText,
+                        styles.heightGraduationText,
                         // eslint-disable-next-line react-native/no-inline-styles
                         {
                           paddingRight:
-                            index === 0
-                              ? 30
-                              : index <= 10
-                              ? 28
-                              : index <= 40
-                              ? 22
-                              : index <= 60
-                              ? 20
-                              : index <= 70
-                              ? 22
-                              : 20,
+                            index / 10 < 10 ? 40 : index / 10 === 11 ? 36 : 36,
                         },
                       ]}>
-                      {index}
+                      {index % 10 === 0 ? index / 10 : ''}
                     </Text>
                   );
                 }
@@ -115,29 +125,30 @@ const App = () => {
       <View style={styles.weightContainer}>
         <Text style={styles.weighCaption}>{'How tall are you Mani?'}</Text>
         <Text style={styles.heightDisplayText}>
-          {`${Math.floor(height / 12)} `}
+          {`${displayFeetText} `}
           <Text style={styles.font18}>{'ft'}</Text>
-          {` ${height - 12 * Math.floor(height / 12)} `}
+          {` ${displayInchText} `}
           <Text style={styles.font18}>{'in'}</Text>
         </Text>
+        <Image source={require('./assets/img/marker.png')} />
         <ScrollView
+          ref={scrollViewRef2}
+          onContentSizeChange={() =>
+            scrollViewRef2.current.scrollTo({
+              x: 650,
+              animated: true,
+            })
+          }
+          scrollEventThrottle={200}
+          onScroll={event =>
+            setHeight(Math.floor(Number(event.nativeEvent.contentOffset.x)))
+          }
           horizontal
           showsHorizontalScrollIndicator={true}
           persistentScrollbar={true}
-          contentContainerStyle={styles.horizontalScrollContainer}>
-          <Slider
-            thumbImage={require('./assets/img/marker.png')}
-            tapToSeek={true}
-            onValueChange={v => setHeight(v)}
-            minimumValue={0}
-            maximumValue={100}
-            minimumTrackTintColor={'white'}
-            maximumTrackTintColor={'white'}
-            step={1}
-            value={height}
-          />
+          contentContainerStyle={styles.heightScrollContainer}>
           <View style={styles.markingContainer}>
-            {Array(101)
+            {Array(201)
               .fill()
               .map((_, i) => i)
               .map((value, index) => {
@@ -148,7 +159,7 @@ const App = () => {
                   return (
                     <Text
                       key={index.toString()}
-                      style={styles.weighMarkerLarge}>
+                      style={styles.heightMarkerLarge}>
                       {'|'}
                     </Text>
                   );
@@ -156,15 +167,15 @@ const App = () => {
                   return (
                     <Text
                       key={index.toString()}
-                      style={styles.weighMarkerSmall}>
+                      style={styles.heightMarkerSmall}>
                       {'|'}
                     </Text>
                   );
                 }
               })}
           </View>
-          <View style={styles.weighGraduationContainer}>
-            {Array(101)
+          <View style={styles.heightGraduationContainer}>
+            {Array(201)
               .fill()
               .map((_, i) => i)
               .map((value, index) => {
@@ -187,10 +198,10 @@ const App = () => {
                               : index <= 60
                               ? 42
                               : index <= 70
-                              ? 42
+                              ? 50
                               : index <= 90
                               ? 42
-                              : 42,
+                              : 44,
                         },
                       ]}>
                       {displayHeightText(index)}
@@ -212,7 +223,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   weightContainer: {
-    width: 300,
+    width: Dimensions.get('screen').width,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'scroll',
@@ -225,24 +236,45 @@ const styles = StyleSheet.create({
   heightDisplayText: {fontWeight: 'bold', fontSize: 32, paddingBottom: 24},
   font24: {fontSize: 24},
   font18: {fontSize: 18},
-  horizontalScrollContainer: {
-    width: 970,
+  weightScrollContainer: {
+    width: Dimensions.get('screen').width * 20,
     height: 100,
     flexDirection: 'column',
     justifyContent: 'center',
-    marginLeft: -30,
+    bottom: 32,
+  },
+  heightScrollContainer: {
+    width: Dimensions.get('screen').width * 5,
+    height: 100,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    bottom: 32,
+  },
+  markingContainerWeight: {
+    flexDirection: 'row',
+    marginHorizontal: 30,
+    alignItems: 'baseline',
+    paddingTop: 48,
+    left: Dimensions.get('window').width / 2 - 49,
   },
   markingContainer: {
     flexDirection: 'row',
     marginHorizontal: 30,
     alignItems: 'baseline',
-    position: 'absolute',
+    justifyContent: 'center',
     top: 22,
-    zIndex: -10, // to show the marker on Top of each graduation
+    left: Dimensions.get('window').width / 2 - 82,
   },
-  weighMarkerLarge: {paddingRight: 3.3, fontSize: 32, color: 'grey'},
+  weighMarkerLarge: {paddingRight: 3.25, fontSize: 32, color: 'grey'},
   weighMarkerSmall: {
-    paddingRight: 3.3,
+    paddingRight: 3.25,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'grey',
+  },
+  heightMarkerLarge: {paddingRight: 3.4, fontSize: 32, color: 'grey'},
+  heightMarkerSmall: {
+    paddingRight: 3.4,
     fontSize: 20,
     fontWeight: 'bold',
     color: 'grey',
@@ -251,7 +283,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 30,
     alignItems: 'baseline',
-    paddingTop: 24,
+    paddingTop: 8,
+    left: Dimensions.get('window').width / 2 - 48,
+  },
+  heightGraduationContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 30,
+    alignItems: 'baseline',
+    paddingTop: 48,
+    left: Dimensions.get('window').width / 2 - 56,
   },
   weighGraduationText: {color: 'grey', fontSize: 20},
   heightGraduationText: {color: 'grey', fontSize: 14},
